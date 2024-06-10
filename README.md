@@ -62,7 +62,14 @@ If the “is.factor” function indicates that a categorical variable is not rec
     attrition$EducationField = as.factor(attrition$EducationField);
     ...
 
-The data will then be split into training and testing sets using a 70/30 partition, resulting in two datasets named trainingData and testingData.
+With the data format and types prepared for logistic regression analysis, we will now examine the correlation matrix for all variables and compare their correlations. Our primary focus in this study is on employee attrition and its potential correlations with the 33 variables in the dataset. Therefore, we will specifically analyze the attrition-related correlations. The following commands in R generate the correlation matrix. Note that the cor function requires numeric values, and since the dataset includes many non-numeric values, an index of numeric columns must be created beforehand.
+
+    numericAttrition <- sapply(attrition, is.numeric);
+    y1 <- “Attrition”;
+    x1 <- setdiff(names(attrition)[numericAttrition], y1);
+    cor(attrition[x1], attrition[[y1]]);
+
+    
 
 ### Modeling
 Logistic regression will be employed for the analysis, as it is well-suited for binary response variables such as employee attrition (Yes/No). The model will use attrition as the dependent variable and the other prepared variables as independent variables.
