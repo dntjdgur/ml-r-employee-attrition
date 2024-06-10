@@ -7,7 +7,7 @@ The objective of this project is to analyze an open-source dataset from General 
 General Electric's HR reports indicate that many high-potential employees are leaving the company for other opportunities. Middle managers have corroborated these reports, noting an increase in job postings. To maintain its competitive edge, GE plans to use a predictive model developed during the pilot stage to identify employees likely to leave and implement measures to retain high-potential employees.
 
 ## Data Source
-Data source can be achieved from [Here](https://https://github.com/dntjdgur/ml-r-employee-attrition/tree/main/data)
+Data source can be obtained from [Here](https://https://github.com/dntjdgur/ml-r-employee-attrition/tree/main/data)
 
 ## Preliminary Analysis Using CRISP-DM
 ### Business Understanding
