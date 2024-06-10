@@ -98,15 +98,19 @@ In this phase, we will build a logistic regression model, determine which variab
 
 Our correlation coefficient heatmap indicates that marital status shows multicollinearity with the stock option level variable, with a coefficient above 0.9. By removing marital status from the dataset, we can eliminate preliminary multicollinearity. The new heatmap shows no multicollinearity, which is a positive sign before proceeding with the analysis.
 
+![Heatmap without multticollinearity](https://github.com/dntjdgur/ml-r-employee-attrition/blob/main/images/VIF%20-%20multicollinearity.png)
+
 We will further validate the removal of multicollinearity through VIF testing. The initial VIF test confirms our correlation coefficient verification, except for variables like job level, monthly income, and years in the current role. A horizontal line on the VIF plot illustrates that a value between 1 and 5 is generally considered moderately correlated (Belsley, 1991). Variables exceeding a VIF value of 5, indicating possible multicollinearity, will be excluded from the model. A secondary VIF bar plot shows that none of the variables now exceed a scale level of 5, indicating that all potential multicollinearity has been successfully removed. Consequently, the data quality is now sufficient to demonstrate variable significance and goodness of fit.
 
-To identify significant variables, we will use the in-built statistical function called summary. The summary statistics reveal which variables are significant and which are not. The results indicate that department, distance from home, environment satisfaction, gender, job involvement, job satisfaction, number of companies worked for, overtime, relationship satisfaction, stock option level, total working years, work-life balance, years since last promotion, and years with the current manager are significant. The insignificant variables will be eliminated, and the secondary summary statistics now show that all remaining variables are significant.
+The summary statistics reveal which variables are significant and which are not. The results indicate that department, distance from home, environment satisfaction, gender, job involvement, job satisfaction, number of companies worked for, overtime, relationship satisfaction, stock option level, total working years, work-life balance, years since last promotion, and years with the current manager are significant. The insignificant variables will be eliminated, and the secondary summary statistics now show that all remaining variables are significant.
+
+![Fine-tuned model summary statistics](https://github.com/dntjdgur/ml-r-employee-attrition/blob/main/images/summary%20statistics%20-%20fine%20tuned.png)
 
 To perform a goodness-of-fit test, we will illustrate a ROC curve and interpret the AUC value. Using the final tuned model data, the ROC curve (shown in the appendix) yields an AUC of 0.8233363, indicating good predictive performance. This means the model can accurately predict outcomes about 8 times out of 10. Using this model, we established a prediction value table, illustrating true positive and negative predictions. The model predicted a total of 783 true positive and negative cases out of 898 training data records, indicating an 87% accuracy rate. This promising result suggests the model is reliable for predicting employee attrition outcomes.
 
+![Model ROC Curve](https://github.com/dntjdgur/ml-r-employee-attrition/blob/main/images/roc.png)
+
 However, there are concerns about the data's accuracy. Although provided by GE's HR department, there could be false responses in rating variables. If the survey was not conducted in a strictly confidential environment, employees might not feel comfortable being honest, especially when HR is overseeing the research. Fear of potential negative consequences might lead employees to submit inaccurate responses. If this is the case, the model's predictions may mislead the analysis.
-
-
 
 ### Evaluation
 In the evaluation phase, the model's output will identify the factors most contributing to employee attrition, providing actionable insights for business strategy development. The predictive accuracy will be assessed by comparing the results from the training and testing models.
