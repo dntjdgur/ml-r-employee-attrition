@@ -69,12 +69,44 @@ With the data format and types prepared for logistic regression analysis, we wil
     x1 <- setdiff(names(attrition)[numericAttrition], y1);
     cor(attrition[x1], attrition[[y1]]);
 
-    
+![Correlation Coefficients of Attrition versus Employee Demographics](https://github.com/dntjdgur/ml-r-employee-attrition/blob/main/images/correlation.png)
+
+As the final step of this CRISP-DM phase, we will divide the data into two separate sets: training and testing. During this process, we will exclude the Over18 column. The training set will comprise 70% of the entire dataset, while the testing set will consist of the remaining 30%. The following command will accomplish this.
+
+    set.seed(100);
+    sampleData = sample(c(TRUE, FALSE), nrow(attrition), replace=TRUE, prob=c(0.7, 0.3));
+    trainingData = attrition[sampleData, ];
+    testingData = attrition[!sampleData, ];
+
+The following codes verify the dimensions of each training and testing datasets.
+
+    dim(trainingData)
+    [1] 869 36
+    dim(testingData)
+    [1] 401 36
+    trainingData = subset(trainingData, select = -c(Over18));
+    testingData = subset(testingData, select = -c(Over18));
 
 ### Modeling
-Logistic regression will be employed for the analysis, as it is well-suited for binary response variables such as employee attrition (Yes/No). The model will use attrition as the dependent variable and the other prepared variables as independent variables.
 
-Initially, the training data will be used to fit the logistic regression model, with the training process refining the model by excluding insignificant variables. The model's accuracy will be evaluated using goodness-of-fit measures such as the likelihood ratio test. According to research, if the p-value for the overall model fit statistic is less than 0.05, we reject the null hypothesis, indicating a good fit (Evaluating Logistic Regression Models, 2015). The goodness of fit will be assessed by comparing the refined model to the initial model with all variables included.
+ChatGPT
+Logistic regression will be employed for the analysis, as it is well-suited for binary response variables such as employee attrition (Yes/No). In this model, attrition will be used as the dependent variable, with other prepared variables serving as independent variables.
+
+Initially, the training data will be used to fit the logistic regression model, refining it by excluding insignificant variables. The model's accuracy will be assessed using goodness-of-fit measures like the likelihood ratio test. According to research, a p-value less than 0.05 for the overall model fit statistic indicates a good fit, allowing us to reject the null hypothesis (Evaluating Logistic Regression Models, 2015). The goodness of fit will be determined by comparing the refined model to the initial model with all variables included.
+
+In this phase, we will build a logistic regression model, determine which variables should be included in the analysis, and evaluate the model's performance in predicting employee attrition outcomes. Having cleaned the data in previous steps, we will construct a correlation matrix to examine correlation values and the variance inflation factor (VIF). A correlation value exceeding 0.9 suggests multicollinearity. To facilitate comparison, we will use a heatmap instead of numerical indicators.
+
+Our correlation coefficient heatmap indicates that marital status shows multicollinearity with the stock option level variable, with a coefficient above 0.9. By removing marital status from the dataset, we can eliminate preliminary multicollinearity. The new heatmap shows no multicollinearity, which is a positive sign before proceeding with the analysis.
+
+We will further validate the removal of multicollinearity through VIF testing. The initial VIF test confirms our correlation coefficient verification, except for variables like job level, monthly income, and years in the current role. A horizontal line on the VIF plot illustrates that a value between 1 and 5 is generally considered moderately correlated (Belsley, 1991). Variables exceeding a VIF value of 5, indicating possible multicollinearity, will be excluded from the model. A secondary VIF bar plot shows that none of the variables now exceed a scale level of 5, indicating that all potential multicollinearity has been successfully removed. Consequently, the data quality is now sufficient to demonstrate variable significance and goodness of fit.
+
+To identify significant variables, we will use the in-built statistical function called summary. The summary statistics reveal which variables are significant and which are not. The results indicate that department, distance from home, environment satisfaction, gender, job involvement, job satisfaction, number of companies worked for, overtime, relationship satisfaction, stock option level, total working years, work-life balance, years since last promotion, and years with the current manager are significant. The insignificant variables will be eliminated, and the secondary summary statistics now show that all remaining variables are significant.
+
+To perform a goodness-of-fit test, we will illustrate a ROC curve and interpret the AUC value. Using the final tuned model data, the ROC curve (shown in the appendix) yields an AUC of 0.8233363, indicating good predictive performance. This means the model can accurately predict outcomes about 8 times out of 10. Using this model, we established a prediction value table, illustrating true positive and negative predictions. The model predicted a total of 783 true positive and negative cases out of 898 training data records, indicating an 87% accuracy rate. This promising result suggests the model is reliable for predicting employee attrition outcomes.
+
+However, there are concerns about the data's accuracy. Although provided by GE's HR department, there could be false responses in rating variables. If the survey was not conducted in a strictly confidential environment, employees might not feel comfortable being honest, especially when HR is overseeing the research. Fear of potential negative consequences might lead employees to submit inaccurate responses. If this is the case, the model's predictions may mislead the analysis.
+
+
 
 ### Evaluation
 In the evaluation phase, the model's output will identify the factors most contributing to employee attrition, providing actionable insights for business strategy development. The predictive accuracy will be assessed by comparing the results from the training and testing models.
@@ -87,13 +119,18 @@ Before deploying the model, it is crucial to ensure the data format is compatibl
 Deploying the model requires thorough evaluation and interpretation of results from a business perspective. The final report should include clear visualizations to help executives easily interpret the findings. Visualizations must be well-labeled, and the report should be logically structured to enhance persuasiveness. The conclusion should summarize the key results and confirm that the primary research objectives have been met.
 
 ## References
-[Changing values when converting column type to numeric. (2011, June 13). Stack Overflow.](https://stackoverflow.com/questions/6328771/changing-values-when-converting-column-type-to-numeric)
+Changing values when converting column type to numeric. (2011, June 13). [Stack Overflow.](https://stackoverflow.com/questions/6328771/changing-values-when-converting-column-type-to-numeric)
 
-Alice, M. (n.d.). [[How to Perform a Logistic Regression in R | DataScience+.](https://datascienceplus.com/perform-logistic-regression-in-r/) 
+Alice, M. (n.d.). [How to Perform a Logistic Regression in R | DataScience+.](https://datascienceplus.com/perform-logistic-regression-in-r/) 
 
 Johnson, D. (2022, November 19). [Factor in R: Categorical Variable & Continuous Variables. Guru99. ](https://www.guru99.com/r-factor-categorical-continuous.html)
 
 Bhalla, D. (n.d.). R : [Keep / Drop Columns from Data Frame. ListenData.](https://www.listendata.com/2015/06/r-keep-drop-columns-from-data-frame.html)
 
-[Correlation of one variable to all the other in R. (2017, August 26). Stack Overflow.](https://stackoverflow.com/questions/45892274/correlation-of-one-variable-to-all-the-other-in-r)
+Correlation of one variable to all the other in R. (2017, August 26). [Stack Overflow.](https://stackoverflow.com/questions/45892274/correlation-of-one-variable-to-all-the-other-in-r)
 
+Belsley, D. A. (1991). Conditioning Diagnostics: Collinearity and Weak Data in Regression (1st ed.). Wiley-Interscience.
+
+[VIF function - RDocumentation. (n.d.).] (https://www.rdocumentation.org/packages/regclass/versions/1.6/topics/VIF)
+
+Shrestha, N. (2020). [Detecting Multicollinearity in Regression Analysis. American Journal of Applied Mathematics and Statistics, 8(2), 39–42.] (https://doi.org/10.12691/ajams-8-2-1)
