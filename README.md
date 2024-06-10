@@ -30,6 +30,38 @@ During the data preparation phase, variables such as employee count, employee nu
 
 Descriptive statistics will then be used to detect outliers, which could affect model accuracy. Outliers will be identified using R's summary() function and visually via histograms. These outliers will be removed to ensure model accuracy. Additionally, some data formats will be adjusted; for instance, 'attrition' and 'overtime' variables will be converted to Boolean values to facilitate logistic regression analysis. Categorical variables, such as education field, will be encoded numerically as per documented mappings.
 
+![Summary Statistics Screenshot pt.1](https://github.com/dntjdgur/ml-r-employee-attrition/blob/main/images/summary_statistics.png)
+![Summary Statistics Screenshot pt.2](https://github.com/dntjdgur/ml-r-employee-attrition/blob/main/images/summary_statistics-2.png)
+
+As the next step, we will re-format the data types and initiate the data cleaning process. This re-formatting is essential for performing logistic regression analysis. Logistic regression generates binary responses, so the dataset must indicate employee attrition as either “Y” or “N.” The attrition column will be converted to numerical values, with “Y” transformed to 1 and “N” to 0. The following command can be used to make this transformation. The second command will ensure the column values are in numerical format, preventing the use of internal integer codes. Similar transformations will be applied to the Gender and OverTime columns: male will be coded as 0 and female as 1, while Yes will be coded as 1 and No as 0 in the OverTime column.
+
+	attrition$Attrition <- with(attrition, ifelse(attrition$Attrition == "Yes", 1, 0));
+    attrition$Attrition <- as.numeric(as.character(attrition$Attrition));
+    attrition$Gender <- with(attrition, ifelse(attrition$Gender == "Male", 0, 1));
+    attrition$Gender <- as.numeric(as.character(attrition$Gender));
+    attrition$OverTime <- with(attrition, ifelse(attrition$ OverTime == "Yes", 1, 0));
+    attrition$OverTime <- as.numeric(as.character(attrition$OverTime));    
+
+The next step involves checking if certain categorical variables are recognized as factor variables by R. The following commands should be executed for all categorical variables. The variables to be verified include: BusinessTravel, Department, Education, EducationField, EnvironmentSatisfaction, Gender, JobInvolvement, JobLevel, JobRole, JobSatisfaction, MaritalStatus, PerformanceRating, RelationshipSatisfaction, and WorkLifeBalance. 
+
+    is.factor(attrition$BusinessTravel);
+    [1] FALSE
+    is.factor(attrition$Department);
+    [1] FALSE
+    is.factor(attrition$Education);
+    [1] FALSE
+    is.factor(attrition$EducationField);
+    [1] FALSE
+    ...
+
+If the “is.factor” function indicates that a categorical variable is not recognized as a factor, it could impact the model analysis. Conversion to factor variables can be achieved with the following commands.
+
+    attrition$BusinessTravel = as.factor(attrition$BusinessTravel);
+    attrition$Department = as.factor(attrition$Department);
+    attrition$Education = as.factor(attrition$Education);
+    attrition$EducationField = as.factor(attrition$EducationField);
+    ...
+
 The data will then be split into training and testing sets using a 70/30 partition, resulting in two datasets named trainingData and testingData.
 
 ### Modeling
